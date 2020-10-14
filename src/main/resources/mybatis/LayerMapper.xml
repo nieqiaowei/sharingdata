@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.palmgo.com.cn.sharingdata.dao.Layerdao">
+	<!-- 动态参数 mybatis 实现 <foreach collection="content" item="item" index="key" 
+		separator="and"> ${key} #{item.${key}} </foreach> -->
+	<!-- 查询总信息 -->
+	<select id="GetLayerCount" parameterType="map" resultType="int"
+		useCache="true">
+		SELECT count(*) FROM ${tableName}
+		<where>
+			1=1
+			<if test="sql != '' and  sql != null ">
+				and ${sql}
+			</if>
+		</where>
+
+	</select>
+
+
+	<select id="GetLayerInfo" parameterType="map" resultType="map"
+		useCache="true">
+		SELECT ${fields} FROM ${tableName}
+		<where>
+			1=1
+			<if test="sql != '' and  sql != null ">
+				and ${sql}
+			</if>
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+
+	</select>
+
+	<!-- 保存 -->
+	<insert id="SaveLayerInfo" parameterType="map" flushCache="true">
+		REPLACE INTO ${tableName}
+		<foreach collection="content.keys" item="key" open="("
+			close=")" separator=",">
+			${key}
+		</foreach>
+		values
+		<foreach collection="content.values" item="value" open="("
+			close=")" separator=",">
+			#{value}
+		</foreach>
+	</insert>
+
+</mapper> 

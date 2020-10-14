@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper
+	namespace="com.palmgo.com.cn.sharingdata.dao.DataRoleSourcedao">
+
+	<select id="getRoleToDataSourceCount" parameterType="map"
+		resultType="int" useCache="true">
+		SELECT count(*) as PageSize FROM roletodatasourceid
+		<where>
+			1 = 1
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="roleid != '' and  roleid != null ">
+				and roleid = #{roleid}
+			</if>
+			<if test="datasourceroleid != '' and  datasourceroleid != null ">
+				and datasourceroleid = #{datasourceroleid}
+			</if>
+		</where>
+
+	</select>
+
+
+	<!-- 查询信息 -->
+	<select id="getRoleToDataSourceInfo" parameterType="map"
+		resultType="DataRoleSource" useCache="true">
+		SELECT * FROM roletodatasourceid
+		<where>
+			1 = 1
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="roleid != '' and  roleid != null ">
+				and roleid = #{roleid}
+			</if>
+			<if test="datasourceroleid != '' and  datasourceroleid != null ">
+				and datasourceroleid = #{datasourceroleid}
+			</if>
+		</where>
+	</select>
+
+	<!-- 保存信息 -->
+	<insert id="saveRoleToDataSource" parameterType="DataRoleSource"
+		flushCache="true">
+		replace into roletodatasourceid
+		(id,roleid,datasourceroleid) VALUES
+		(#{id},#{roleid},#{datasourceroleid})
+	</insert>
+
+	<!-- 删除信息 -->
+	<delete id="delRoleToDataSource" parameterType="DataRoleSource"
+		flushCache="true">
+		delete from roletodatasourceid
+		<where>
+			1 = 1
+			<if test="roleid != '' and roleid != null">
+				and roleid = #{roleid}
+			</if>
+		</where>
+	</delete>
+
+</mapper> 

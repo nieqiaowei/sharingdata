@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper
+	namespace="com.palmgo.com.cn.sharingdata.dao.Consumeruserdao">
+
+	<!-- 消费者相关操作 -->
+
+	<!-- 消费列表 -->
+	<select id="GetconsumeruserCount" parameterType="map"
+		resultType="int" useCache="true">
+		SELECT count(*) as PageSize FROM consumeruser
+		<where>
+			1 = 1
+			<if test="userid != '' and  userid != null ">
+				and userid=#{userid}
+			</if>
+			<if test="business_code != '' and  business_code != null">
+				and business_code=#{business_code}
+			</if>
+
+		</where>
+
+	</select>
+
+	<!-- 查询消费列表信息 -->
+	<select id="Getconsumeruser" parameterType="map"
+		resultType="Consumeruser" useCache="true">
+		SELECT  userid,id,business_code,fields,push,pushadress,pushtopic,pushtag,
+		oldaddress,overdueteime,infosql,dataformat
+		FROM consumeruser
+		<where>
+			1 = 1
+			<if test="userid != '' and  userid != null ">
+				and userid=#{userid}
+			</if>
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="business_code != '' and  business_code != null">
+				and business_code=#{business_code}
+			</if>
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+
+	</select>
+
+	<!-- 添加消费者信息 批量处理 -->
+	<insert id="SaveconsumeruserInfo" parameterType="map"
+		flushCache="true">
+		replace into consumeruser
+		(id,userid,business_code,fields,push,pushadress,pushtopic,pushtag,oldaddress,overdueteime,infosql,dataformat)
+		values
+		<foreach collection="content" item="item" index="index"
+			separator=",">
+			(
+			#{item.id},#{item.userid},#{item.business_code},#{item.fields},#{item.push},#{item.pushadress},#{pushtopic},#{pushtag},
+			#{item.oldaddress},#{item.overdueteime,#{item.infosql},#{item.dataformat}}
+			)
+		</foreach>
+	</insert>
+
+	<!-- 删除生产者信息 删除业务表及表和字段关系表 -->
+	<delete id="DeleteconsumeruserInfo" parameterType="Consumeruser"
+		flushCache="true">
+		DELETE FROM consumeruser
+		<where>
+			1=1
+			<if test="userid != '' and  userid != null ">
+				and userid=#{userid}
+			</if>
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="business_code != '' and  business_code != null ">
+				and business_code=#{business_code}
+			</if>
+		</where>
+
+	</delete>
+
+</mapper> 

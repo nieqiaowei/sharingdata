@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.palmgo.com.cn.sharingdata.dao.Systemdao">
+
+
+
+	<!-- 查询总信息 -->
+	<select id="GetSystem" parameterType="map"
+		resultType="SystemProPerties" useCache="true">
+		SELECT * FROM systemproperties
+		spu
+		<where>
+			1 = 1
+		</where>
+
+	</select>
+
+	<!-- 修改信息 -->
+	<update id="UpdateSystemInfo" parameterType="SystemProPerties"
+		flushCache="true">
+
+		UPDATE systemproperties  SET
+		public_key = #{public_key},
+		private_key = #{private_key},
+		sysname = #{sysname} ,
+		license = #{license} ,
+		sysaddress = #{sysaddress},
+		data = #{data},
+		type = #{type}
+		WHERE systemid = #{systemid}
+
+	</update>
+
+
+</mapper> 

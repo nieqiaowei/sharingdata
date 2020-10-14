@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.palmgo.com.cn.sharingdata.dao.BussinessTabledao">
+
+	<!-- 业务相关操作 -->
+	
+	<!-- 查询消费者的总数 -->
+	<select id="GetbusinesstableCount" parameterType="map"
+		resultType="int" useCache="true">
+		SELECT count(*) as PageSize FROM ${tableName}
+		<where>
+			1 = 1
+			<if test="sql != '' and  sql != null ">
+			<!-- 暂时写成sql 后期考虑如何变成配置的参数 -->
+				and ${sql}
+			</if>
+		</where>
+
+	</select>
+
+	<!-- 查询消费者列表信息-去重 -->
+	<select id="Getbusinesstable" parameterType="map"
+		resultType="map" useCache="true">
+		SELECT 
+		<foreach collection="content.keys" item="key" open=""
+			close="" separator=",">
+			${key}
+		</foreach> 
+		FROM ${tableName}
+		<where>
+			1 = 1
+			<if test="sql != '' and  sql != null ">
+			<!-- 暂时写成sql 后期考虑如何变成配置的参数 -->
+				and ${sql}
+			</if>
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+
+	</select>
+	
+	<!-- 添加信息 -->
+	<insert id="savebusinesstable" parameterType="map"
+		flushCache="true">
+		REPLACE INTO ${tableName}
+		<foreach collection="content.keys" item="key" open="("
+			close=")" separator=",">
+			${key}
+		</foreach>
+		values
+		<foreach collection="content.values" item="value" open="("
+			close=")" separator=",">
+			#{value}
+		</foreach>
+	</insert>
+	
+</mapper> 

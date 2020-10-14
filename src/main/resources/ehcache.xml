@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+    xsi:noNamespaceSchemaLocation="ehcache.xsd">   
+    
+    <!-- 集群缓存 -->
+    
+    <diskStore path="java.io.tmpdir/visulPublish/all/"/> 
+    
+    <cacheManagerPeerProviderFactory   
+        class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"   
+        properties="peerDiscovery=manual,   
+        rmiUrls=//127.0.0.1:40000/visulPublishCache |//127.0.0.1:60000/visulPublishCache"/>
+    <!-- server1 监听40000 server2 监听60000 -->  
+    <cacheManagerPeerListenerFactory   
+        class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"   
+        properties="hostName=127.0.0.1,port=40000, socketTimeoutMillis=2000"/>  
+  
+    <!-- timeToIdleSeconds="300" -->
+<defaultCache   
+    maxElementsInMemory="0"   
+    eternal="false"  
+    timeToIdleSeconds="600" 
+    timeToLiveSeconds="600"   
+    overflowToDisk="true"   
+    diskSpoolBufferSizeMB="30"   
+    maxElementsOnDisk="10000000"   
+    diskPersistent="true"   
+    diskExpiryThreadIntervalSeconds="120"   
+    memoryStoreEvictionPolicy="LRU">  
+  
+     <cacheEventListenerFactory  
+                class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"  
+                properties="replicateAsynchronously=true, replicatePuts=true,  
+                            replicatePutsViaCopy=true, replicateUpdates=true,  
+                            replicateUpdatesViaCopy=true, replicateRemovals=true,  
+                            asynchronousReplicationIntervalMillis=200"/>  
+        <bootstrapCacheLoaderFactory  
+                class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"/>  
+
+   
+</defaultCache>  
+  
+<cache name="visulPublishCache"   
+    maxElementsInMemory="0"   
+    eternal="false"   
+    timeToIdleSeconds="600"   
+    timeToLiveSeconds="600"   
+    overflowToDisk="true"   
+    diskSpoolBufferSizeMB="30"   
+    maxElementsOnDisk="10000000"   
+    diskPersistent="true"   
+    diskExpiryThreadIntervalSeconds="120"   
+    memoryStoreEvictionPolicy="LRU">   
+  
+     <cacheEventListenerFactory  
+                class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"  
+                properties="replicateAsynchronously=true, replicatePuts=true,  
+                            replicatePutsViaCopy=true, replicateUpdates=true,  
+                            replicateUpdatesViaCopy=true, replicateRemovals=true,  
+                            asynchronousReplicationIntervalMillis=200"/>  
+        <bootstrapCacheLoaderFactory  
+                class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"/>  
+    </cache>  
+</ehcache>

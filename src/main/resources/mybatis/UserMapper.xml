@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.palmgo.com.cn.sharingdata.dao.Userdao">
+
+	<!-- 查询总页数 -->
+	<select id="GetUserCount" parameterType="map" resultType="int"
+		useCache="true">
+		SELECT count(*) as PageSize FROM datauser spu
+		<where>
+			1 = 1
+			<if test="userid != '' and  userid != null ">
+				and spu.userid=#{userid}
+			</if>
+			<if test="username != '' and  username != null">
+				and spu.username=#{username}
+			</if>
+			<if test="name != '' and  name != null">
+				and spu.name=#{name}
+			</if>
+			<if test="roleid != '' and  roleid != null ">
+				and spu.roleid=#{roleid}
+			</if>
+
+		</where>
+
+	</select>
+
+	<!-- 查询总信息 -->
+	<select id="GetUser" parameterType="map" resultType="UserInfo"
+		useCache="true">
+		SELECT * FROM datauser
+		spu
+		<where>
+			1 = 1
+			<if test="userid != '' and  userid != null ">
+				and spu.userid= #{userid}
+			</if>
+			<if test="username != '' and  username != null">
+				and spu.username= #{username}
+			</if>
+			<if test="name != '' and  name != null">
+				and spu.name=  #{name}
+			</if>
+			<if test="roleid != '' and  roleid != null ">
+				and spu.roleid=#{roleid}
+			</if>
+			order by updateTime desc 
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+
+	</select>
+
+	<!-- 添加用户信息 -->
+	<insert id="SaveUserInfo" parameterType="UserInfo"
+		flushCache="true">
+		replace into datauser (userid,username,password,public_key,private_key,roleid,name,updateTime,createTime,createName) VALUES
+		(#{userid},#{username},#{password},#{public_key},#{private_key},#{roleid},#{name},#{updateTime},#{createTime},#{createName})
+	</insert>
+
+
+	<!-- 删除用户信息 -->
+	<delete id="DeleteUserInfo" parameterType="map"
+		flushCache="true">
+
+		DELETE FROM datauser
+		<where>
+			1=1
+			<if test="userid != '' and  userid != null ">
+				and userid= #{userid}
+			</if>
+			<if test="username != '' and  username != null">
+				and username= #{username}
+			</if>
+		</where>
+
+	</delete>
+
+
+</mapper> 

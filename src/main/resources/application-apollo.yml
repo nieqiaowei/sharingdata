@@ -1,0 +1,15 @@
+app:
+  #应用的名称
+  id: SharingdataServer
+# set apollo meta server address, adjust to actual address if necessary
+apollo:
+  # 控制台地址：http://172.16.30.241:8070/ Apollo admin
+  meta: http://172.16.30.241:8080/
+  bootstrap:
+    #是否注入到spring的Environment
+    enabled: true
+    #/将Apollo配置加载提到初始化日志系统之前
+    eagerLoad:
+      enabled: true
+      #yml的需要加，properties的则不需要加
+    namespaces: application.yml   

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper
+	namespace="com.palmgo.com.cn.sharingdata.dao.DataSourcedao">
+
+	<select id="getDataSourceCount" parameterType="map"
+		resultType="int" useCache="true">
+		SELECT count(*) as PageSize FROM datasource
+		<where>
+			1 = 1
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="username != '' and  username != null ">
+				and username=#{username}
+			</if>
+			<if test="name != '' and  name != null ">
+				and name=#{name}
+			</if>
+			<if test="password != '' and  password != null">
+				and password=#{password}
+			</if>
+			<if test="host  != '' and  host  != null">
+				and host =#{host}
+			</if>
+			<if test="port  != '' and  port  != null">
+				and port =#{port}
+			</if>
+			<if test="database  != '' and  database  != null">
+				and database =#{database}
+			</if>
+			<if test="sourcetypeid  != '' and  sourcetypeid  != null">
+				and sourcetypeid =#{sourcetypeid}
+			</if>
+		</where>
+
+	</select>
+
+
+	<!-- 查询信息 -->
+	<select id="getDataSourceInfo" parameterType="map"
+		resultType="DataSource" useCache="true">
+		SELECT * FROM datasource
+		<where>
+			1 = 1
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="username != '' and  username != null ">
+				and username=#{username}
+			</if>
+			<if test="name != '' and  name != null ">
+				and name=#{name}
+			</if>
+			<if test="password != '' and  password != null">
+				and password=#{password}
+			</if>
+			<if test="host  != '' and  host  != null">
+				and host =#{host}
+			</if>
+			<if test="port  != '' and  port  != null">
+				and port =#{port}
+			</if>
+			<if test="database  != '' and  database  != null">
+				and database =#{database}
+			</if>
+			<if test="sourcetypeid  != '' and  sourcetypeid  != null">
+				and sourcetypeid =#{sourcetypeid}
+			</if>
+			order by createtime
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+	</select>
+
+	<!-- 保存信息 -->
+	<insert id="saveDataSource" parameterType="DataSource"
+		flushCache="true">
+		replace into datasource (id,name,username,password,host,port,database,sourcetypeid,createtime,remotejdbc_url) VALUES
+		(#{id},#{name},#{username},#{password},#{host},#{port},#{database},#{sourcetypeid},#{createtime},#{remotejdbc_url})
+	</insert>
+
+	<!-- 删除信息 -->
+	<delete id="delDataSource" parameterType="DataSource"
+		flushCache="true">
+		delete from datasource
+		<where>
+			1 = 1
+			<if test="id != '' and id != null">
+				and id = #{id}
+			</if>
+		</where>
+
+	</delete>
+
+
+</mapper> 

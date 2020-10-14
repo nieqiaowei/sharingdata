@@ -1,0 +1,17 @@
+#服务名称配置
+spring:
+  profiles:
+    active:
+    - sys
+  main:
+    allow-bean-definition-overriding: true
+    
+        
+    
+      
+   
+  
+
+
+    
+          

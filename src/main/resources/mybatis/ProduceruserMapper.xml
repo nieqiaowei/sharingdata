@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper
+	namespace="com.palmgo.com.cn.sharingdata.dao.Produceruserdao">
+
+	<!-- 生产者相关操作 -->
+
+
+	<!-- 查询生产者的总数 -->
+	<select id="GetproduceruserCount" parameterType="map"
+		resultType="int" useCache="true">
+		SELECT count(*) as PageSize FROM produceruser
+		<where>
+			1 = 1
+			<if test="userid != '' and  userid != null ">
+				and userid=#{userid}
+			</if>
+			<if test="business_code != '' and  business_code != null">
+				and business_code=#{business_code}
+			</if>
+			<if test="tableName != '' and  tableName != null">
+				and tableName=#{tableName}
+			</if>
+		</where>
+
+	</select>
+
+	<!-- 查询生产者列表信息 -->
+	<select id="Getproduceruser" parameterType="map"
+		resultType="Produceruser" useCache="true">
+		SELECT * FROM produceruser
+		<where>
+			1 = 1
+			<if test="userid != '' and  userid != null ">
+				and userid=#{userid}
+			</if>
+			<if test="business_code != '' and  business_code != null">
+				and business_code=#{business_code}
+			</if>
+			<if test="tableName != '' and  tableName != null">
+				and tableName=#{tableName}
+			</if>
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+
+	</select>
+
+	<!-- 添加生产者信息 需要创建表 -->
+	<insert id="InsertproduceruserInfo" parameterType="Produceruser"
+		flushCache="true">
+		INSERT produceruser
+		(userid,business_code,business_name,tableName,address,dataformat)
+		VALUES
+		(#{userid},#{business_code},#{business_name},#{tableName},#{address},#{dataformat})
+	</insert>
+
+
+	<!-- 查询表对应字段的信息是否存在 -->
+	<select id="Gettableoffield" parameterType="map"
+		resultType="Tableoffield" useCache="true">
+		SELECT * FROM tableoffield
+		<where>
+			1 = 1
+			<if test="tableNamekey != '' and  tableNamekey != null ">
+				and tableNamekey=#{tableNamekey}
+			</if>
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+	</select>
+
+	<!-- 添加表对应字段的信息 -->
+	<insert id="InserttableoffieldInfo" parameterType="Produceruser"
+		flushCache="true">
+		INSERT into tableoffield
+		(tableNamekey, fieldNamekey, fieldTypekey, fieldLengthkey,decimalkey,nonullkey,commentkey,primary_key)
+		values
+		<foreach collection="content" item="item" index="index"
+			separator=",">
+			(
+			#{item.tableNamekey},#{item.fieldNamekey},#{item.fieldTypekey},#{item.fieldLengthkey},#{item.decimalkey},#{item.nonullkey},#{item.commentkey},#{item.primary_key}
+			)
+		</foreach>
+
+	</insert>
+
+	<!-- 创建业务表信息 -->
+	<insert id="createtableInfo" parameterType="map"
+		flushCache="true">
+		
+		CREATE TABLE ${tableName}
+		<!-- 表结构 -->
+		<foreach collection="content" item="item" open="("
+			separator=",">
+			${item.fieldNamekey} 
+			
+			<if test="item.fieldTypekey == 'varchar'">
+				varchar(${item.fieldLengthkey})
+			</if>
+			
+			<if test="item.fieldTypekey == 'longtext'">
+				${item.fieldTypekey}
+			</if>
+			
+			<if test="item.fieldTypekey == 'int'">
+				int(${item.fieldLengthkey})
+			</if>
+			
+			<if test="item.fieldTypekey == 'float'">
+				float(${item.fieldLengthkey},${item.decimalkey})
+			</if>
+			
+			<if test="item.fieldTypekey == 'double'">
+				${item.fieldTypekey}
+			</if>
+			
+			<if test="item.fieldTypekey == 'datetime'">
+				${item.fieldTypekey}
+			</if>
+			
+			<if test="item.fieldTypekey == 'date'">
+				${item.fieldTypekey}
+			</if>
+			
+			COLLATE utf8mb4_bin ${item.isNull} COMMENT '${item.commentkey}'
+		</foreach>
+		<!-- 主键索引 -->
+		<if test="primary_index != '' and  primary_index != null ">
+			, PRIMARY KEY (${primary_index}) USING BTREE
+		</if>
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+	</insert>
+
+	<!-- 删除业务表 -->
+	<update id="DROPtableInfo" parameterType="map" flushCache="true">
+		DROP
+		TABLE ${tableName}
+	</update>
+
+	<!-- 删除生产者信息 删除业务表及表和字段关系表 -->
+	<delete id="DeletetableoffieldInfo" parameterType="map"
+		flushCache="true">
+
+		DELETE FROM tableoffield
+		<where>
+			1=1
+			<if test="tableName != '' and  tableName != null ">
+				and tableNamekey=#{tableName}
+			</if>
+		</where>
+
+	</delete>
+
+
+	<!-- 修改生产者信息 表名称不能修改 -->
+	<update id="UpdateproduceruserInfo" parameterType="Produceruser"
+		flushCache="true">
+
+		UPDATE produceruser spu SET
+		spu.business_code =
+		#{business_code},
+		spu.business_name = #{business_name},
+		spu.address =
+		#{address},
+		spu.dataformat = #{dataformat}
+		WHERE spu.userid
+		= #{userid}
+
+	</update>
+
+	<!-- 删除生产者信息 删除业务表及表和字段关系表 -->
+	<delete id="DeleteproduceruserInfo" parameterType="Produceruser"
+		flushCache="true">
+		DELETE FROM produceruser
+		<where>
+			1=1
+			<if test="userid != '' and  userid != null ">
+				and userid=#{userid}
+			</if>
+		</where>
+
+	</delete>
+	
+	<!-- 查询表是否存在 
+	<select id="GettableName" parameterType="map"
+		resultType="String" useCache="true">
+		SHOW TABLES LIKE #{tableName}
+	</select>
+	-->
+	<!-- 查询表字段 
+	<select id="GettableName" parameterType="map"
+		resultType="map" useCache="true">
+		SHOW FULL FIELDS FROM #{tableName}
+	</select>
+	-->
+
+
+</mapper> 

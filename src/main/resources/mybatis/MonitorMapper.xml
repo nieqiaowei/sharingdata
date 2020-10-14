@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.palmgo.com.cn.sharingdata.dao.Monitordao">
+
+	<!-- 监控相关操作 -->
+	
+	<!-- 查询监控的总数 -->
+	<select id="GetmonitorCount" parameterType="map"
+		resultType="int" useCache="true">
+		SELECT count(*) as PageSize FROM monitor
+		<where>
+			1 = 1
+			<if test="username != '' and  username != null ">
+				and username = #{username}
+			</if>
+			<if test="starttime != '' and  starttime != null and  endtime != '' and  endtime != null">
+				and updatetime = BETWEEN #{updatetime} and #{endtime}
+			</if>
+		</where>
+
+	</select>
+
+	<!-- 查询监控列表信息 -->
+	<select id="Getmonitor" parameterType="map"
+		resultType="MonitorInfo" useCache="true">
+		SELECT * FROM monitor
+		<where>
+			1 = 1
+			<if test="username != '' and  username != null ">
+				and username = #{username}
+			</if>
+			<if test="starttime != '' and  starttime != null and  endtime != '' and  endtime != null">
+				and updatetime = BETWEEN #{updatetime} and #{endtime}
+			</if>
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+
+	</select>
+	
+</mapper> 

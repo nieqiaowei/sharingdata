@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper
+	namespace="com.palmgo.com.cn.sharingdata.dao.SourceTypedao">
+
+	<!-- 查询信息 -->
+	<select id="getSourceTypeInfo" parameterType="SourceType"
+		resultType="SourceType" useCache="true">
+		SELECT * FROM sourcetype 
+		<where>
+			1 = 1
+			<if test="id != '' and id != null">
+				and id = #{id}
+			</if>
+			<if test="name !='' and name != null">
+				and name = #{name}
+			</if>
+		</where>
+	</select>
+
+	<!-- 保存信息 -->
+	<insert id="saveSourceType" parameterType="SourceType" flushCache="true">
+		replace into sourcetype (id,name,driver_class_name,tablesSql,tableFieldSql) VALUES
+		(#{id},#{name},#{driver_class_name},#{tablesSql},#{tableFieldSql})
+	</insert>
+
+	<!-- 删除信息 -->
+	<delete id="delSourceType" parameterType="SourceType" flushCache="true">
+		delete from sourcetype
+		<where>
+			1 = 1
+			<if test="id != '' and id != null">
+				and id = #{id}
+			</if>
+			<if test="name !='' and name != null">
+				and name = #{name}
+			</if>
+		</where>
+
+	</delete>
+
+
+</mapper> 

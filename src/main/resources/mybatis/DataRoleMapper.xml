@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper
+	namespace="com.palmgo.com.cn.sharingdata.dao.DataRoledao">
+
+	<select id="getDataRoleCount" parameterType="map"
+		resultType="int" useCache="true">
+		SELECT count(*) as PageSize FROM datarole
+		<where>
+			1 = 1
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="name != '' and  name != null ">
+				and name=#{name}
+			</if>
+			<if test="code != '' and  code != null ">
+				and code=#{code}
+			</if>
+		</where>
+
+	</select>
+
+
+	<!-- 查询信息 -->
+	<select id="getDataRoleInfo" parameterType="map"
+		resultType="DataRole" useCache="true">
+		SELECT * FROM datarole
+		<where>
+			1 = 1
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="name != '' and  name != null ">
+				and name=#{name}
+			</if>
+			<if test="code != '' and  code != null ">
+				and code=#{code}
+			</if>
+			order by createtime desc
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+	</select>
+
+	<!-- 保存信息 -->
+	<insert id="saveDataRole" parameterType="DataRole"
+		flushCache="true">
+		replace into datarole (id,name,code,createtime) VALUES
+		(#{id},#{name},#{code},#{createtime})
+	</insert>
+
+	<!-- 删除信息 -->
+	<delete id="delDataRole" parameterType="DataRole"
+		flushCache="true">
+		delete from datarole
+		<where>
+			1 = 1
+			<if test="id != '' and id != null">
+				and id = #{id}
+			</if>
+		</where>
+
+	</delete>
+
+
+</mapper> 

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper
+	namespace="com.palmgo.com.cn.sharingdata.dao.DataProducerdao">
+
+	<select id="getDataProducerCount" parameterType="map"
+		resultType="int" useCache="true">
+		SELECT count(*) as PageSize FROM dataProducer
+		<where>
+			1 = 1
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="type != '' and  type != null ">
+				and type=#{type}
+			</if>
+			<if test="name != '' and  name != null ">
+				and name like '%${name}%'
+			</if>
+			<if test="code != '' and  code != null ">
+				and code like '%${code}%'
+			</if>
+			<if test="tableName != '' and  tableName != null">
+				and tableName like '%${tableName}%'
+			</if>
+			<if test="datasourceid  != '' and  datasourceid  != null">
+				and datasourceid =#{datasourceid}
+			</if>
+		</where>
+
+	</select>
+
+
+	<!-- 查询信息 -->
+	<select id="getDataProducerInfo" parameterType="map"
+		resultType="DataProducer" useCache="true">
+		SELECT * FROM dataProducer
+		<where>
+			1 = 1
+			<if test="id != '' and  id != null ">
+				and id=#{id}
+			</if>
+			<if test="type != '' and  type != null ">
+				and type=#{type}
+			</if>
+			<if test="name != '' and  name != null ">
+				and name like '%${name}%'
+			</if>
+			<if test="code != '' and  code != null ">
+				and code like '%${code}%'
+			</if>
+			<if test="tableName != '' and  tableName != null">
+				and tableName like '%${tableName}%'
+			</if>
+			<if test="datasourceid  != '' and  datasourceid  != null">
+				and datasourceid =#{datasourceid}
+			</if>
+			order by createtime
+			<if test="totalPerPage != 0">
+				limit #{pageIndex} , #{totalPerPage}
+			</if>
+		</where>
+	</select>
+
+	<!-- 保存信息 -->
+	<insert id="saveDataProducer" parameterType="DataProducer"
+		flushCache="true">
+		replace into dataProducer (id,name,code,datasourceid,countSql,selectSql,insertSql,updateSql,deleteSql,tableName,createtime,selectParameter,updateParameter,insertParameter,deleteParameter,type) VALUES
+		(#{id},#{name},#{code},#{datasourceid},#{countSql},#{selectSql},#{insertSql},#{updateSql},#{deleteSql},#{tableName},#{createtime},#{selectParameter},#{updateParameter},#{insertParameter},#{deleteParameter},#{type})
+	</insert>
+
+	<!-- 删除信息 -->
+	<delete id="delDataProducer" parameterType="DataProducer"
+	flushCache="true">
+	delete from dataProducer
+		<where>
+			1 = 1
+			<if test="id != '' and id != null">
+				and id = #{id}
+			</if>
+		</where>
+
+	</delete>
+
+
+</mapper> 
